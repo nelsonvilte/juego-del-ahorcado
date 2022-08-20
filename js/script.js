@@ -85,3 +85,13 @@ function verificarLetraClicada(key) {
     return true;
   }
 }
+
+function adicionarLetraCorrecta(i) {
+  palabraCorrecta += palabraSecreta[i].toUpperCase();
+}
+
+function adicionarLetraIncorrecta(letter) {
+  if (palabraSecreta.indexOf(letter) <= 0) {
+    errores -= 1;
+  }
+}
