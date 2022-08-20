@@ -30,7 +30,7 @@ var letras = [];
 
 var palabraCorrecta = "";
 
-var errores = 9;
+var errores = 0;
 
 function escogerPalabraSecreta() {
   var palabra = palabras[Math.floor(Math.random() * palabras.length)];
@@ -94,7 +94,7 @@ function adicionarLetraCorrecta(i) {
 
 function adicionarLetraIncorrecta(letter) {
   if (palabraSecreta.indexOf(letter) <= 0) {
-    errores -= 1;
+    errores += 1;
   }
 }
 
@@ -112,8 +112,96 @@ document.onkeydown = (e) => {
     } else {
       if (!verificarLetraClicada(e.key)) return;
       adicionarLetraIncorrecta(letra);
+      dibujarAhorcado();
       console.log("letra incorrecta: ", letra);
       escribirLetraIncorrecta(letra, errores);
     }
   }
 };
+
+function crearHorca() {
+  tablero.fillStyle = "#0A3871";
+  tablero.beginPath();
+  tablero.moveTo(100, 600);
+  tablero.lineTo(50, 620);
+  tablero.lineTo(150, 620);
+  tablero.fill();
+  tablero.fillRect(95, 205, 10, 400);
+  tablero.fillRect(95, 205, 200, 10);
+  tablero.fillRect(295, 205, 10, 50);
+}
+
+function dibujarAhorcado() {
+  switch (errores) {
+    case 1:
+      crearHorca();
+      break;
+    case 2:
+      cabeza();
+      break;
+    case 3:
+      cuerpo();
+      break;
+    case 4:
+      brazoIzquierdo();
+      break;
+    case 5:
+      brazoDerecho();
+      break;
+    case 6:
+      piernaIzquierda();
+      break;
+    case 7:
+      piernaDerecha();
+      break;
+  }
+}
+
+function cabeza() {
+  tablero.fillStyle = "#0A3871";
+  tablero.beginPath();
+  tablero.arc(300, 295, 40, 0, 2 * 3.14);
+  tablero.fill();
+}
+
+function cuerpo() {
+  tablero.fillStyle = "#0A3871";
+  tablero.fillRect(295, 335, 10, 130);
+}
+
+function brazoIzquierdo() {
+  tablero.strokeStyle = "#0A3871";
+  tablero.beginPath();
+  tablero.lineWidth = 8;
+  tablero.moveTo(295, 355);
+  tablero.lineTo(250, 385);
+  tablero.stroke();
+}
+
+function brazoDerecho() {
+  tablero.strokeStyle = "#0A3871";
+  tablero.beginPath();
+  tablero.lineWidth = 8;
+  tablero.moveTo(305, 355);
+  tablero.lineTo(350, 385);
+  tablero.stroke();
+}
+
+function piernaIzquierda() {
+  tablero.strokeStyle = "#0A3871";
+  tablero.beginPath();
+  tablero.lineWidth = 8;
+  tablero.moveTo(300, 455);
+  tablero.lineTo(250, 515);
+  tablero.stroke();
+}
+
+function piernaDerecha() {
+  tablero.strokeStyle = "#0A3871";
+  tablero.beginPath();
+  tablero.lineWidth = 8;
+  tablero.moveTo(300, 455);
+  tablero.lineTo(360, 515);
+  tablero.fill();
+  tablero.stroke();
+}
