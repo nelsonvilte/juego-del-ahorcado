@@ -34,14 +34,13 @@ var errores = 9;
 
 function escogerPalabraSecreta() {
   var palabra = palabras[Math.floor(Math.random() * palabras.length)];
-  var palabraSecreta = palabra;
-  console.log(palabra);
+  palabraSecreta = palabra;
+  console.log("pal: ", palabra);
   return palabra;
 }
 
 function dibujarLineas(palabraSecreta) {
-  console.log(palabraSecreta);
-  tablero.lineWidth = 6;
+  tablero.lineWidth = 4;
   tablero.lineCap = "round";
   tablero.lineJoin = "round";
   tablero.strokeSyle = "#0A3871";
@@ -56,15 +55,17 @@ function dibujarLineas(palabraSecreta) {
 }
 dibujarLineas(escogerPalabraSecreta());
 
-function escribirLetraCorrecta() {
+function escribirLetraCorrecta(index) {
   tablero.font = "bold 52px Inter";
   tablero.lineWidth = 6;
   tablero.lineCap = "round";
   tablero.lineJoin = "round";
+  tablero.fillStyle = "#0A3871";
   tablero.strokeSyle = "#0A3871";
 
   var ancho = 600 / palabraSecreta.length;
-  tablero.filterText(palabraSecreta[index], 505(ancho * index), 620);
+  tablero.fillText(palabraSecreta[index], 505 + ancho * index, 620);
+  tablero.textAlign = "center";
 }
 
 function escribirLetraIncorrecta(letra, errorsLeft) {
@@ -72,8 +73,9 @@ function escribirLetraIncorrecta(letra, errorsLeft) {
   tablero.lineWidth = 6;
   tablero.lineCap = "round";
   tablero.lineJoin = "round";
-  tablero.strokeSyle = "#0A3871";
-  tablero.filterText(letra, 535 + (40 * (10 - errorsLeft), 710, 40));
+  tablero.fillStyle = "#ff0000";
+  // tablero.strokeSyle = "#0A3871";
+  tablero.fillText(letra, 535 + 40 * (6 - errorsLeft), 710, 40);
 }
 
 function verificarLetraClicada(key) {
@@ -95,3 +97,23 @@ function adicionarLetraIncorrecta(letter) {
     errores -= 1;
   }
 }
+
+document.onkeydown = (e) => {
+  let letra = e.key.toLocaleUpperCase();
+  if (!verificarLetraClicada(e.key)) {
+    if (palabraSecreta.includes(letra)) {
+      console.log("letra correcta: ", letra);
+      adicionarLetraCorrecta(palabraSecreta.indexOf(letra));
+      for (let i = 0; i < palabraSecreta.length; i++) {
+        if (palabraSecreta[i] === letra) {
+          escribirLetraCorrecta(i);
+        }
+      }
+    } else {
+      if (!verificarLetraClicada(e.key)) return;
+      adicionarLetraIncorrecta(letra);
+      console.log("letra incorrecta: ", letra);
+      escribirLetraIncorrecta(letra, errores);
+    }
+  }
+};
