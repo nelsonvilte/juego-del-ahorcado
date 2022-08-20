@@ -55,3 +55,33 @@ function dibujarLineas(palabraSecreta) {
   tablero.closePath();
 }
 dibujarLineas(escogerPalabraSecreta());
+
+function escribirLetraCorrecta() {
+  tablero.font = "bold 52px Inter";
+  tablero.lineWidth = 6;
+  tablero.lineCap = "round";
+  tablero.lineJoin = "round";
+  tablero.strokeSyle = "#0A3871";
+
+  var ancho = 600 / palabraSecreta.length;
+  tablero.filterText(palabraSecreta[index], 505(ancho * index), 620);
+}
+
+function escribirLetraIncorrecta(letra, errorsLeft) {
+  tablero.font = "bold 40px Inter";
+  tablero.lineWidth = 6;
+  tablero.lineCap = "round";
+  tablero.lineJoin = "round";
+  tablero.strokeSyle = "#0A3871";
+  tablero.filterText(letra, 535 + (40 * (10 - errorsLeft), 710, 40));
+}
+
+function verificarLetraClicada(key) {
+  if (letras.length < 1 || letras.indexOf(key) < 0) {
+    letras.push(key);
+    return false;
+  } else {
+    letras.push(key);
+    return true;
+  }
+}
