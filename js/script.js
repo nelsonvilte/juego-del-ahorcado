@@ -263,8 +263,8 @@ function imprimirFelicidades() {
   tablero.lineWidth = 5;
   tablero.lineCap = "round";
   tablero.lineJoin = "round";
-  tablero.fillStyle = "#0A3871";
-  tablero.strokeSyle = "#0A3871";
+  tablero.fillStyle = "#2C974B";
+  tablero.strokeSyle = "#2C974B";
   tablero.textAlign = "center";
   tablero.fillText("¡GANASTE!", 600, 750);
 }
