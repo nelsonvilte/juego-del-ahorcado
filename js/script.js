@@ -230,24 +230,19 @@ function piernaDerecha() {
 }
 
 function verificarGanador() {
-  /*   var letrasCorrectasIngresadas = letras.toString().toUpperCase();
-
-  console.log(
-    "letras correctas ingresadas string " + letrasCorrectasIngresadas
-  );
-  console.log("palabra secreta string" + palabraSecreta); */
-
   var letrasCorrectasSinRepetidos = [...new Set(palabraCorrecta.split(""))];
 
   console.log("letras correctas set a array " + letrasCorrectasSinRepetidos);
 
   var palabraElegida = [...new Set(palabraSecreta.split(""))];
+  palabraElegida.sort();
 
   console.log("palabra elegida set a array: ", palabraElegida);
 
   let intersection = letrasCorrectasSinRepetidos.filter((x) =>
     palabraElegida.includes(x)
   );
+  intersection.sort();
   console.log("Interseccion: ", intersection);
 
   if (JSON.stringify(intersection) === JSON.stringify(palabraElegida)) {
