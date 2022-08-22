@@ -2,29 +2,36 @@ var palabras = [
   "MOUSE",
   "TECLADO",
   "MONITOR",
-  "IMPRESORA",
+  "TERMINAL",
   "MEMORIA",
   "PROCESADOR",
   "GIGABYTE",
   "MAINFRAME",
   "MEGABYTE",
-  "PROGRAMACION",
+  "LINUX",
   "JAVASCRIPT",
   "PYTHON",
   "JAVA",
   "BACKEND",
   "FRONTEND",
-  "TECNOLOGIA",
-  "INFORMATICA",
-  "APLICACION",
+  "SPRINT",
+  "YOUTUBE",
+  "GOOGLE",
   "SOFTWARE",
   "HARDWARE",
   "SKILLS",
-  "REPOSITORIO",
-  "COMPUTADORA",
+  "CODIGO",
+  "WINDOWS",
 ];
 
+var contenedorTablero = document.getElementById("contenedorTablero");
+lienzo = document.getElementById("horca");
 var tablero = document.getElementById("horca").getContext("2d");
+var inicio = document.getElementById("inicio");
+var btnIniciarJuego = document.getElementById("btnIniciarJuego");
+
+var btnReiniciarJuego = document.getElementById("btnReiniciarJuego");
+var btnFinalizarJuego = document.getElementById("btnFinalizarJuego");
 
 var letras = [];
 
@@ -33,6 +40,44 @@ var palabraCorrecta = "";
 var errores = 0;
 
 var mostrarError = document.getElementById("mostrarError");
+
+btnIniciarJuego.addEventListener("click", function (event) {
+  event.preventDefault();
+  inicio.style.display = "none";
+
+  tablero.clearRect(0, 0, 1200, 800);
+
+  iniciarPartida();
+});
+
+btnReiniciarJuego.addEventListener("click", function (event) {
+  event.preventDefault();
+  inicio.style.display = "none";
+
+  letras = [];
+
+  palabraCorrecta = "";
+
+  errores = 0;
+
+  tablero.clearRect(0, 0, lienzo.width, lienzo.height);
+
+  iniciarPartida();
+});
+
+btnFinalizarJuego.addEventListener("click", function (event) {
+  event.preventDefault();
+  inicio.style.display = "flex";
+  contenedorTablero.className = "invisible";
+  mostrarError.className = "invisible";
+  letras = [];
+
+  palabraCorrecta = "";
+
+  errores = 0;
+
+  tablero.clearRect(0, 0, 1200, 800);
+});
 
 function escogerPalabraSecreta() {
   var palabra = palabras[Math.floor(Math.random() * palabras.length)];
@@ -50,13 +95,13 @@ function dibujarLineas(palabraSecreta) {
   tablero.beginPath();
   var ancho = 600 / palabraSecreta.length;
   for (let i = 0; i < palabraSecreta.length; i++) {
-    tablero.moveTo(300 + ancho * i, 640);
-    tablero.lineTo(350 + ancho * i, 640);
+    tablero.moveTo(300 + ancho * i, 590);
+    tablero.lineTo(350 + ancho * i, 590);
   }
   tablero.stroke();
   tablero.closePath();
 }
-dibujarLineas(escogerPalabraSecreta());
+//dibujarLineas(escogerPalabraSecreta());
 
 function escribirLetraCorrecta(index) {
   tablero.font = "bold 52px Inter";
@@ -67,7 +112,7 @@ function escribirLetraCorrecta(index) {
   tablero.strokeSyle = "#0A3871";
 
   var ancho = 600 / palabraSecreta.length;
-  tablero.fillText(palabraSecreta[index], 305 + ancho * index, 620);
+  tablero.fillText(palabraSecreta[index], 305 + ancho * index, 570);
 }
 
 function escribirLetraIncorrecta(letra, errorsLeft) {
@@ -77,7 +122,7 @@ function escribirLetraIncorrecta(letra, errorsLeft) {
   tablero.lineJoin = "round";
   tablero.fillStyle = "#ff0000";
 
-  tablero.fillText(letra, 5 + 40 * (10 + errorsLeft), 710, 40);
+  tablero.fillText(letra, 5 + 40 * (10 + errorsLeft), 660, 40);
 }
 
 function verificarLetraClicada(key) {
@@ -100,28 +145,34 @@ function adicionarLetraIncorrecta(letter) {
   }
 }
 
-document.onkeydown = (e) => {
-  let letra = e.key.toLocaleUpperCase();
-  //let caracter = letra.charCodeAt();
-  if (!verificarLetraClicada(e.key)) {
-    if (palabraSecreta.includes(letra)) {
-      console.log("letra correcta: ", letra);
-      adicionarLetraCorrecta(palabraSecreta.indexOf(letra));
-      for (let i = 0; i < palabraSecreta.length; i++) {
-        if (palabraSecreta[i] === letra) {
-          escribirLetraCorrecta(i);
+function iniciarPartida() {
+  contenedorTablero.className = "visible";
+  dibujarLineas(escogerPalabraSecreta());
+  document.onkeydown = (e) => {
+    let letra = e.key.toLocaleUpperCase();
+    if (!verificarLetraClicada(e.key)) {
+      if (palabraSecreta.includes(letra)) {
+        console.log("letra correcta: ", letra);
+        adicionarLetraCorrecta(palabraSecreta.indexOf(letra));
+        for (let i = 0; i < palabraSecreta.length; i++) {
+          if (palabraSecreta[i] === letra) {
+            escribirLetraCorrecta(i);
+          }
         }
+      } else {
+        if (!verificarLetraClicada(e.key)) return;
+        adicionarLetraIncorrecta(letra);
+        dibujarAhorcado();
+        console.log("letra incorrecta: ", letra);
+        escribirLetraIncorrecta(letra, errores);
       }
-    } else {
-      if (!verificarLetraClicada(e.key)) return;
-      adicionarLetraIncorrecta(letra);
-      dibujarAhorcado();
-      console.log("letra incorrecta: ", letra);
-      escribirLetraIncorrecta(letra, errores);
+      if (verificarGanador()) {
+        imprimirFelicidades();
+        document.onkeydown = null;
+      }
     }
-    if (verificarGanador()) imprimirFelicidades();
-  }
-};
+  };
+}
 
 function crearHorca() {
   tablero.fillStyle = "#0A3871";
@@ -163,9 +214,8 @@ function dibujarAhorcado() {
       break;
     case 7:
       piernaDerecha();
-      break;
-    case 8:
       salidaError();
+      document.onkeydown = null;
       break;
   }
 }
