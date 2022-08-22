@@ -32,6 +32,8 @@ var palabraCorrecta = "";
 
 var errores = 0;
 
+var mostrarError = document.getElementById("mostrarError");
+
 function escogerPalabraSecreta() {
   var palabra = palabras[Math.floor(Math.random() * palabras.length)];
   palabraSecreta = palabra;
@@ -40,15 +42,16 @@ function escogerPalabraSecreta() {
 }
 
 function dibujarLineas(palabraSecreta) {
-  tablero.lineWidth = 4;
+  mostrarError.className = "invisible";
+  tablero.lineWidth = 6;
   tablero.lineCap = "round";
   tablero.lineJoin = "round";
   tablero.strokeSyle = "#0A3871";
   tablero.beginPath();
   var ancho = 600 / palabraSecreta.length;
   for (let i = 0; i < palabraSecreta.length; i++) {
-    tablero.moveTo(500 + ancho * i, 640);
-    tablero.lineTo(550 + ancho * i, 640);
+    tablero.moveTo(300 + ancho * i, 640);
+    tablero.lineTo(350 + ancho * i, 640);
   }
   tablero.stroke();
   tablero.closePath();
@@ -64,8 +67,7 @@ function escribirLetraCorrecta(index) {
   tablero.strokeSyle = "#0A3871";
 
   var ancho = 600 / palabraSecreta.length;
-  tablero.fillText(palabraSecreta[index], 505 + ancho * index, 620);
-  tablero.textAlign = "center";
+  tablero.fillText(palabraSecreta[index], 305 + ancho * index, 620);
 }
 
 function escribirLetraIncorrecta(letra, errorsLeft) {
@@ -74,8 +76,8 @@ function escribirLetraIncorrecta(letra, errorsLeft) {
   tablero.lineCap = "round";
   tablero.lineJoin = "round";
   tablero.fillStyle = "#ff0000";
-  // tablero.strokeSyle = "#0A3871";
-  tablero.fillText(letra, 535 + 40 * (6 - errorsLeft), 710, 40);
+
+  tablero.fillText(letra, 5 + 40 * (10 + errorsLeft), 710, 40);
 }
 
 function verificarLetraClicada(key) {
@@ -100,6 +102,7 @@ function adicionarLetraIncorrecta(letter) {
 
 document.onkeydown = (e) => {
   let letra = e.key.toLocaleUpperCase();
+  //let caracter = letra.charCodeAt();
   if (!verificarLetraClicada(e.key)) {
     if (palabraSecreta.includes(letra)) {
       console.log("letra correcta: ", letra);
@@ -116,19 +119,26 @@ document.onkeydown = (e) => {
       console.log("letra incorrecta: ", letra);
       escribirLetraIncorrecta(letra, errores);
     }
+    if (verificarGanador()) imprimirFelicidades();
   }
 };
 
 function crearHorca() {
   tablero.fillStyle = "#0A3871";
   tablero.beginPath();
-  tablero.moveTo(100, 600);
-  tablero.lineTo(50, 620);
-  tablero.lineTo(150, 620);
+  tablero.moveTo(500, 500);
+  tablero.lineTo(450, 520);
+  tablero.lineTo(550, 520);
   tablero.fill();
-  tablero.fillRect(95, 205, 10, 400);
-  tablero.fillRect(95, 205, 200, 10);
-  tablero.fillRect(295, 205, 10, 50);
+  tablero.strokeStyle = "#0A3871";
+  tablero.beginPath();
+  tablero.lineWidth = 10;
+  tablero.moveTo(500, 500);
+  tablero.lineTo(500, 250);
+  tablero.lineTo(600, 250);
+  tablero.lineTo(600, 280);
+  tablero.stroke();
+  tablero.closePath();
 }
 
 function dibujarAhorcado() {
@@ -154,54 +164,134 @@ function dibujarAhorcado() {
     case 7:
       piernaDerecha();
       break;
+    case 8:
+      salidaError();
+      break;
   }
 }
 
 function cabeza() {
   tablero.fillStyle = "#0A3871";
   tablero.beginPath();
-  tablero.arc(300, 295, 40, 0, 2 * 3.14);
+  tablero.arc(600, 300, 30, 0, 2 * 3.14);
   tablero.fill();
+  tablero.closePath();
 }
 
 function cuerpo() {
-  tablero.fillStyle = "#0A3871";
-  tablero.fillRect(295, 335, 10, 130);
+  tablero.strokeStyle = "#0A3871";
+  tablero.beginPath();
+  tablero.lineWidth = 8;
+  tablero.moveTo(600, 310);
+  tablero.lineTo(600, 390);
+  tablero.stroke();
+  tablero.closePath();
 }
 
 function brazoIzquierdo() {
   tablero.strokeStyle = "#0A3871";
   tablero.beginPath();
   tablero.lineWidth = 8;
-  tablero.moveTo(295, 355);
-  tablero.lineTo(250, 385);
+  tablero.moveTo(600, 340);
+  tablero.lineTo(560, 350);
   tablero.stroke();
+  tablero.closePath();
 }
 
 function brazoDerecho() {
   tablero.strokeStyle = "#0A3871";
   tablero.beginPath();
   tablero.lineWidth = 8;
-  tablero.moveTo(305, 355);
-  tablero.lineTo(350, 385);
+  tablero.moveTo(600, 340);
+  tablero.lineTo(640, 350);
   tablero.stroke();
+  tablero.closePath();
 }
 
 function piernaIzquierda() {
   tablero.strokeStyle = "#0A3871";
   tablero.beginPath();
   tablero.lineWidth = 8;
-  tablero.moveTo(300, 455);
-  tablero.lineTo(250, 515);
+  tablero.moveTo(600, 395);
+  tablero.lineTo(560, 430);
   tablero.stroke();
+  tablero.closePath();
 }
 
 function piernaDerecha() {
   tablero.strokeStyle = "#0A3871";
   tablero.beginPath();
   tablero.lineWidth = 8;
-  tablero.moveTo(300, 455);
-  tablero.lineTo(360, 515);
+  tablero.moveTo(600, 395);
+  tablero.lineTo(640, 430);
   tablero.fill();
   tablero.stroke();
+  tablero.closePath();
+}
+
+function verificarGanador() {
+  /*   var letrasCorrectasIngresadas = letras.toString().toUpperCase();
+
+  console.log(
+    "letras correctas ingresadas string " + letrasCorrectasIngresadas
+  );
+  console.log("palabra secreta string" + palabraSecreta); */
+
+  var letrasCorrectasSinRepetidos = [...new Set(palabraCorrecta.split(""))];
+
+  console.log("letras correctas set a array " + letrasCorrectasSinRepetidos);
+
+  var palabraElegida = [...new Set(palabraSecreta.split(""))];
+
+  console.log("palabra elegida set a array: ", palabraElegida);
+
+  let intersection = letrasCorrectasSinRepetidos.filter((x) =>
+    palabraElegida.includes(x)
+  );
+  console.log("Interseccion: ", intersection);
+
+  if (JSON.stringify(intersection) === JSON.stringify(palabraElegida)) {
+    console.log("GANASTE");
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function imprimirFelicidades() {
+  tablero.font = "bold 32px Inter";
+  tablero.lineWidth = 5;
+  tablero.lineCap = "round";
+  tablero.lineJoin = "round";
+  tablero.fillStyle = "#0A3871";
+  tablero.strokeSyle = "#0A3871";
+  tablero.textAlign = "center";
+  tablero.fillText("¡GANASTE!", 600, 750);
+}
+
+function imprimirError() {
+  mostrarError.className = "visible";
+
+  // Crear nodo de tipo Element
+  var parrafo = document.createElement("p");
+
+  // Crear nodo de tipo Text
+  var contenido = document.createTextNode("¡Fin del juego!");
+
+  // Añadir el nodo Text como hijo del nodo tipo Element
+  parrafo.appendChild(contenido);
+
+  // Añadir el nodo Element como hijo de la pagina
+  mostrarError.appendChild(parrafo);
+}
+
+function salidaError() {
+  tablero.font = "bold 32px Inter";
+  tablero.lineWidth = 5;
+  tablero.lineCap = "round";
+  tablero.lineJoin = "round";
+  tablero.fillStyle = "#0A3871";
+  tablero.strokeSyle = "#0A3871";
+  tablero.textAlign = "center";
+  tablero.fillText("¡FIN DEL JUEGO!", 600, 750);
 }

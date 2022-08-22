@@ -1,0 +1,42 @@
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    background: #f3f5fc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.25em;
+    min-height: 100%;
+    width: 100%;
+
+}
+
+.invisible {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
+
+.contenedor {
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+}
+
+#aparece-ahorcado {
+    display: flex;
+    margin: 0 2px 2px 0;
+    align-items: center;
+
+}
+
+canvas {
+    border: 1px solid black;
+    width: 100%;
+
+}
