@@ -94,8 +94,8 @@ function dibujarLineas(palabraSecreta) {
   tablero.beginPath();
   var ancho = 600 / palabraSecreta.length;
   for (let i = 0; i < palabraSecreta.length; i++) {
-    tablero.moveTo(300 + ancho * i, 440);
-    tablero.lineTo(350 + ancho * i, 440);
+    tablero.moveTo(300 + ancho * i, 400);
+    tablero.lineTo(350 + ancho * i, 400);
   }
   tablero.stroke();
   tablero.closePath();
@@ -111,7 +111,7 @@ function escribirLetraCorrecta(index) {
   tablero.strokeSyle = "#0A3871";
   tablero.textAlign = "start";
   var ancho = 600 / palabraSecreta.length;
-  tablero.fillText(palabraSecreta[index], 305 + ancho * index, 410);
+  tablero.fillText(palabraSecreta[index], 305 + ancho * index, 390);
 }
 
 function escribirLetraIncorrecta(letra, errorsLeft) {
@@ -121,7 +121,7 @@ function escribirLetraIncorrecta(letra, errorsLeft) {
   tablero.lineJoin = "round";
   tablero.fillStyle = "#ff0000";
 
-  tablero.fillText(letra, 5 + 40 * (10 + errorsLeft), 510, 40);
+  tablero.fillText(letra, 5 + 40 * (10 + errorsLeft), 450, 40);
 }
 
 function verificarLetraClicada(key) {
@@ -288,7 +288,6 @@ function verificarGanador() {
   intersection.sort();
 
   if (JSON.stringify(intersection) === JSON.stringify(palabraElegida)) {
-    console.log("GANASTE");
     return true;
   } else {
     return false;
@@ -303,7 +302,7 @@ function imprimirFelicidades() {
   tablero.fillStyle = "#2C974B";
   tablero.strokeSyle = "#2C974B";
   tablero.textAlign = "center";
-  tablero.fillText("¡GANASTE!", 600, 600);
+  tablero.fillText("¡GANASTE!", 600, 500);
 }
 
 function salidaError() {
@@ -314,5 +313,5 @@ function salidaError() {
   tablero.fillStyle = "#0A3871";
   tablero.strokeSyle = "#0A3871";
   tablero.textAlign = "center";
-  tablero.fillText("¡FIN DEL JUEGO!", 600, 600);
+  tablero.fillText("¡FIN DEL JUEGO!", 600, 500);
 }
